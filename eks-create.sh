@@ -146,30 +146,30 @@ function create {
     printf "Configuring Kubeconfig\n"
     printf ">>> writing kubeconfig to ~/.kube/$CLUSTER_NAME <<<\n"
     cat >  ~/.kube/$CLUSTER_NAME <<EOF
-    apiVersion: v1
-    clusters:
-    - cluster:
-        server: ${ENDPOINT}
-        certificate-authority-data: ${CERT}
-      name: kubernetes
-    contexts:
-    - context:
-        cluster: kubernetes
-        user: aws
-      name: aws
-    current-context: aws
-    kind: Config
-    preferences: {}
-    users:
-    - name: aws
-      user:
-        exec:
-          apiVersion: client.authentication.k8s.io/v1alpha1
-          command: heptio-authenticator-aws
-          args:
-            - "token"
-            - "-i"
-            - "${CLUSTER_NAME}"
+apiVersion: v1
+clusters:
+- cluster:
+    server: ${ENDPOINT}
+    certificate-authority-data: ${CERT}
+  name: kubernetes
+contexts:
+- context:
+    cluster: kubernetes
+    user: aws
+  name: aws
+current-context: aws
+kind: Config
+preferences: {}
+users:
+- name: aws
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1alpha1
+      command: heptio-authenticator-aws
+      args:
+        - "token"
+        - "-i"
+        - "${CLUSTER_NAME}"
 EOF
 
     export KUBECONFIG=$KUBECONFIG:~/.kube/$CLUSTER_NAME
@@ -179,18 +179,18 @@ EOF
     printf "Configuring Worker Auth...\n"
 
         cat > aws-auth-cm.yaml <<EOF
-    apiVersion: v1
-    kind: ConfigMap
-    metadata:
-      name: aws-auth
-      namespace: kube-system
-    data:
-      mapRoles: |
-        - rolearn: ${INSTANCE_ROLE}
-          username: system:node:{{EC2PrivateDNSName}}
-          groups:
-            - system:bootstrappers
-            - system:nodes
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aws-auth
+  namespace: kube-system
+data:
+  mapRoles: |
+    - rolearn: ${INSTANCE_ROLE}
+      username: system:node:{{EC2PrivateDNSName}}
+      groups:
+        - system:bootstrappers
+        - system:nodes
 EOF
 
     kubectl apply -f aws-auth-cm.yaml

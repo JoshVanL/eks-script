@@ -17,14 +17,14 @@ CLUSTER_NAME=eks-test-cluster
 
 NODE_GROUP_FILE=eks-nodegroup.yaml
 WORKER_STACK_NAME=eks-service-worker-nodes
-NODE_MIN=1
-NODE_MAX=1
+NODE_MIN=3
+NODE_MAX=3
 NODE_TYPE=t2.small
 NODE_GROUP_NAME=eks-worker-group
 WORKER_AMI=ami-73a6e20b
 ###############
 
-printf "Configuring Auth...\n"
+#printf "Configuring Auth...\n"
 #export VAULT_ADDR=https://vault.jetstack.net:8200
 #export VAULT_CLIENT_CERT=${HOME}/.vault-user-joshua-van-leeuwen.crt
 #export VAULT_CLIENT_KEY=${HOME}/.vault-user-joshua-van-leeuwen.key
